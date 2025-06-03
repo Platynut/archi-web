@@ -3,8 +3,8 @@ var mdp;
 var signin = document.querySelector('#signin');
 var token;
 
-const signBtn = document.getElementById('sign');
-const signinForm = document.getElementById('signin');
+const signBtn = document.querySelector('sign');
+const signinForm = document.querySelector('signin');
 
 if (signBtn && signinForm) {
     signBtn.addEventListener('click', function(event) {
@@ -200,18 +200,18 @@ async function getProduitsByCategory(token, categoryId) {
 }
 
 async function showProductsOverlay(token, categorie) {
-    const overlay = document.getElementById('productOverlay');
-    const content = document.getElementById('productOverlayContent');
+    const overlay = document.querySelector('productOverlay');
+    const content = document.querySelector('productOverlayContent');
     content.innerHTML = `<button id="closeOverlay" title="Fermer">&times;</button>
         <h2>Produits de ${categorie.name}</h2>
         <div id="productsList"></div>`;
-    overlay.classList.remove('hidden');
+    overlay.classList.toggle('hidden'); 
 
-    document.getElementById('closeOverlay').onclick = () => overlay.classList.add('hidden');
-    overlay.onclick = (e) => { if (e.target === overlay) overlay.classList.add('hidden'); };
+    document.querySelector('closeOverlay').onclick = () => overlay.classList.toggle('hidden');
+    overlay.onclick = (e) => { if (e.target === overlay) overlay.classList.toggle('hidden'); };
 
     const produits = await getProduitsByCategory(token, categorie.id);
-    const listDiv = document.getElementById('productsList');
+    const listDiv = document.querySelector('productsList');
     if (produits.length === 0) {
         listDiv.textContent = "Aucun produit pour cette catégorie.";
     } else {
@@ -223,12 +223,11 @@ async function showProductsOverlay(token, categorie) {
     }
 }
 
-// Initialisation sur product.html
 if (window.location.pathname.endsWith('product.html')) {
     const token = localStorage.getItem('token');
     if (token) {
         displayCategories(token);
-        const searchInput = document.getElementById('search');
+        const searchInput = document.querySelector('search');
         searchInput.addEventListener('input', function() {
             const value = this.value.trim().toLowerCase();
             document.querySelectorAll('#productList > div').forEach(div => {
